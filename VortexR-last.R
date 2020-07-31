@@ -57,6 +57,10 @@ conflict_prefer("filter", "dplyr")
 basic_nondd <- collate_one_dat('Parameters-tests-nondd-RFGB_Basic nondd.dat', 1000, verbose = FALSE)
 basic_dd <- collate_one_dat('Parameters-tests-RFGB_Basic dd.dat', 1000, verbose = FALSE)
 allscenario_dd <- collate_dat('Parameters-tests-RFGB',1000, dir_in = "VOutput")
+scenarioS89 <- collate_dat('Parameters-tests-RFGB_S89',1000, dec_sep=",", dir_in = "VOutput")
+names(scenarioS89)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
+
+
 allscenario_nondd <- collate_dat('Parameters-tests-nondd-RFGB',1000, dir_in = "VOutput")
 
 #Prévenir des bugs, renommer colomnes
@@ -82,12 +86,37 @@ names(reintro.5ans)[9] <- "r.stoch"
 reintro.5ans <- reintro.5ans %>% filter(pop.name %in% "Reintroduite") 
 
 # Catastrpohy
-setwd("~/Aurore/VORTEX10/catastrophy-dd/VOutput")
-allcata <- collate_dat('catastrophy-dd', 1000, verbose = FALSE, dec_sep=",")
-names(allcata)[9] <- "r.stoch"
-names(allcata)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
+#avec meilleurs combinaisons
+setwd("~/Aurore/VORTEX10/VOutput")
+basic.cata25 <- collate_dat('catastrophy-dd_Basic-25ans', 1000, verbose = FALSE, dec_sep=",")
+names(basic.cata25)[9] <- "r.stoch"
+names(basic.cata25)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
+cata25 <- collate_dat('catastrophy-dd_25ans',1000, verbose = FALSE, dec_sep=",")
+names(cata25)[9] <- "r.stoch"
+names(cata25)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
+basic.cata50 <- collate_dat('catastrophy-dd_Basic-50ans', 1000, verbose = FALSE, dec_sep=",")
+names(basic.cata50)[9] <- "r.stoch"
+names(basic.cata50)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
+cata50 <- collate_dat('catastrophy-dd_50ans',1000, verbose = FALSE, dec_sep=",")
+names(cata50)[9] <- "r.stoch"
+names(cata50)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
+
 setwd("~/Aurore/VORTEX10/VortexR")
 save(allcata,file="allcata.rda")
+
+#avec pires combinaisons
+basic.worst25 <- collate_dat('catastrophy-worst_Basic-25ans', 1000, verbose = FALSE, dec_sep=",")
+names(basic.worst25)[9] <- "r.stoch"
+names(basic.worst25)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
+cata.worst25 <- collate_dat('catastrophy-worst_25ans',1000, verbose = FALSE, dec_sep=",")
+names(cata.worst25)[9] <- "r.stoch"
+names(cata.worst25)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
+basic.worst50 <- collate_dat('catastrophy-worst_Basic-50ans', 1000, verbose = FALSE, dec_sep=",")
+names(basic.worst50)[9] <- "r.stoch"
+names(basic.worst50)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
+cata.worst50 <- collate_dat('catastrophy-worst_50ans',1000, verbose = FALSE, dec_sep=",")
+names(cata.worst50)[9] <- "r.stoch"
+names(cata.worst50)[24:36]<-c("Nalleles","SE.Nalleles.","SD.Nalleles.","Nlethals","SE.Nlethals.","SD.Nlethals.","TE","SE.TE.","SD.TE.","medTE","MortalityT","SE.MortalityT.","SD.MortalityT.")
 
 # Avec basic scenario a une seule population = naturelle (original version)
 allscenario_dd <- read.table("allscenario_dd.txt",sep=';') # avec Basic 
@@ -138,7 +167,10 @@ line_plot_year(data=Het.reintro.nondd, project="Parameters-tests-RFGB.xlm", scen
 
 #### Filtrer meilleurs en fonction de Pextant et Het les scenarios #####
 Pextant.dd <- allscenario_dd %>% filter(Pextant>0.8)
+Pextant.S89 <- scenarioS89 %>% filter(PExtant>0.8)
+
 Het.natdd <- Pextant.dd %>% filter(pop.name %in% "Naturelle") %>%filter(Het>0.85)
+Het.S89 <- scenarioS89 %>% filter(pop.name %in% "Naturelle") %>%filter(GeneDiv>0.85)
 Het.reintrodd <- Pextant.dd %>% filter(pop.name %in% "Reintroduite") %>%filter(Het>0.90)
 
 Pextant.nondd <- allscenario_nondd %>% filter(PExtant>0.8)
@@ -165,10 +197,10 @@ dot_plot(data=Pextant, project="Parameters-tests-RFGB.xlm", scenario='Basic dd',
          params="Pextant", plotpops='Reintroduite',save2disk=FALSE)
 
 #### Comparer combinaisons DD reintro et naturelle par distri Het ####
-best.Het.5ans <- Het.natdd %>% filter(scen.name %in% c("S1","S17","S9","S25"))
-best.Het.3ans <- Het.natdd %>% filter(scen.name %in% c("S18","S2","S10","S26"))
-best.Het.813 <- Het.natdd %>% filter(scen.name %in% c("S9","S1","S17","S25"))
-best.Het.2040 <- Het.natdd %>% filter(scen.name %in% c("S89","S83","S81","S75"))
+best.Het.5ans <- Het.natdd %>% filter(scen.name %in% c("S1","S17","S9","S25","Basic dd"))
+best.Het.3ans <- Het.natdd %>% filter(scen.name %in% c("S18","S2","S10","S26","Basic dd"))
+best.Het.813 <- Het.natdd %>% filter(scen.name %in% c("S9","S1","S17","S25","Basic dd"))
+best.Het.2040 <- Het.natdd %>% filter(scen.name %in% c("S89","S83","S81","S75","Basic dd"))
 
 mean.het3ans <- na.omit(as.data.frame(tapply(best.Het.3ans$Nextant, best.Het.3ans$scen.name,mean)))
 names(mean.het3ans)[1] <- "mean"
@@ -176,20 +208,22 @@ mean.het5ans <- na.omit(as.data.frame(tapply(best.Het.5ans$Nextant, best.Het.5an
 names(mean.het5ans)[1] <- "mean"
 ks.test(mean.het3ans$mean,mean.het5ans$mean, alternative="greater") #p-value = 0.01832 donc 5 ans est bien supérieur à 3 ans
 
-# on ne peut pas comparer avant de faire tourner plus de replicat car pour le moment seul S89 pour 20/40 va jusqu a 25 ans
-mean.het813 <- na.omit(as.data.frame(tapply(best.Het.813$Nextant, best.Het.813$scen.name,mean)))
+# Probleme avec cette methode car on calcul les moyennes mais pas les ecarts types et si ils se chevauchent finalement les tests 
+# ne comptent plus... a verifier
+
+mean.het813 <- na.omit(as.data.frame(tapply(best.Het.813$Pextant, best.Het.813$scen.name,mean)))
 names(mean.het813)[1] <- "mean"
-mean.het2040 <- na.omit(as.data.frame(tapply(best.Het.2040$Nextant, best.Het.2040$scen.name,mean)))
+mean.het2040 <- na.omit(as.data.frame(tapply(Het.S89$PExtant, Het.S89$scen.name,mean)))
 names(mean.het2040)[1] <- "mean"
-ks.test(mean.het813$mean,mean.het2040$mean, alternative="two.sided") #p-value = 0.2286 
+ks.test(mean.het813$mean,mean.het2040$mean, alternative="two.sided") #p-value = 0.02857 et "less" = 0.01832 donc 20/40 offre DivGen < 8/13
 
 Het.3.250.14 <- reintro.3ans %>% filter(scen.name %in% c("3.250.14","3.250.14-Copy","3.250.14-Copy2","3.250.14-Copy3"))
 Het.3.250.14 <- na.omit(as.data.frame(tapply(Het.3.250.14$GeneDiv, Het.3.250.14$scen.name,mean)))
 names(Het.3.250.14)[1] <- "mean"
-Het.3.250.44 <- reintro.3ans %>% filter(scen.name %in% c("3.50.14","3.50.14-Copy","3.50.14-Copy2","3.50.14-Copy3"))
+Het.3.250.44 <- reintro.3ans %>% filter(scen.name %in% c("3.250.44","3.250.44-Copy","3.250.44-Copy2","3.250.44-Copy3"))
 Het.3.250.44 <- na.omit(as.data.frame(tapply(Het.3.250.44$GeneDiv, Het.3.250.44$scen.name,mean)))
 names(Het.3.250.44)[1] <- "mean"
-Het.3.50.14 <- reintro.3ans %>% filter(scen.name %in% c("3.250.44","3.250.44-Copy","3.250.44-Copy2","3.250.44-Copy3")) 
+Het.3.50.14 <- reintro.3ans %>% filter(scen.name %in% c("3.50.14","3.50.14-Copy","3.50.14-Copy2","3.50.14-Copy3")) 
 Het.3.50.14 <- na.omit(as.data.frame(tapply(Het.3.50.14$GeneDiv, Het.3.50.14$scen.name,mean)))
 names(Het.3.50.14)[1] <- "mean"
 Het.3.50.44 <- reintro.3ans %>% filter(scen.name %in% c("3.50.44","3.50.44-Copy","3.50.44-Copy2","3.50.44-Copy3"))
@@ -199,29 +233,29 @@ names(Het.3.50.44)[1] <- "mean"
 Het.5.250.14 <- reintro.5ans %>% filter(scen.name %in% c("5.250.14","5.250.14-Copy","5.250.14-Copy2","5.250.14-Copy3"))
 Het.5.250.14 <- na.omit(as.data.frame(tapply(Het.5.250.14$GeneDiv, Het.5.250.14$scen.name,mean)))
 names(Het.5.250.14)[1] <- "mean"
-Het.5.250.44 <- reintro.5ans %>% filter(scen.name %in% c("5.50.14","5.50.14-Copy","5.50.14-Copy2","5.50.14-Copy3"))
+Het.5.250.44 <- reintro.5ans %>% filter(scen.name %in% c("5.250.44","5.250.44-Copy","5.250.44-Copy2","5.250.44-Copy3"))
 Het.5.250.44 <- na.omit(as.data.frame(tapply(Het.5.250.44$GeneDiv, Het.5.250.44$scen.name,mean)))
 names(Het.5.250.44)[1] <- "mean"
-Het.5.50.14 <- reintro.5ans %>% filter(scen.name %in% c("5.250.44","5.250.44-Copy","5.250.44-Copy2","5.250.44-Copy3"))
+Het.5.50.14 <- reintro.5ans %>% filter(scen.name %in% c("5.50.14","5.50.14-Copy","5.50.14-Copy2","5.50.14-Copy3"))
 Het.5.50.14 <- na.omit(as.data.frame(tapply(Het.5.50.14$GeneDiv, Het.5.50.14$scen.name,mean)))
 names(Het.5.50.14)[1] <- "mean"
 Het.5.50.44 <- reintro.5ans %>% filter(scen.name %in% c("5.50.44","5.50.44-Copy","5.50.44-Copy2","5.50.44-Copy3")) 
 Het.5.50.44 <- na.omit(as.data.frame(tapply(Het.5.50.44$GeneDiv, Het.5.50.44$scen.name,mean)))
 names(Het.5.50.44)[1] <- "mean"
 
-# Diff 3 ans 44 ou 14% de surive = oui meilleur avec 14%
-ks.test(Het.3.250.44$mean,Het.3.250.14$mean, alternative="two.sided") #p-value = 0.03663 différence significative et "greater" = 0.01832
-ks.test(Het.3.50.44$mean,Het.3.50.14$mean, alternative="two.sided") #p-value = 0.02857
+# Diff 3 ans 44 ou 14% de surive = non
+ks.test(Het.3.250.44$mean,Het.3.250.14$mean, alternative="two.sided") #Nextant p-value = 0.7714 pas de différence, GeneDiv = execo
+ks.test(Het.3.50.44$mean,Het.3.50.14$mean, alternative="two.sided") #Nextant p-value = 1 et greater = 0.7788
 
-# Diff 5 ans 44 ou 14% de surive = oui meilleur avec 14%
-ks.test(Het.5.250.44$mean,Het.5.250.14$mean, alternative="two.sided") #p-value = 0.02857 différence significative et  "greater" = 0.01832
-ks.test(Het.5.50.44$mean,Het.5.50.14$mean, alternative="two.sided") #p-value = 0.02857
+# Diff 5 ans 44 ou 14% de surive = non
+ks.test(Het.5.250.44$mean,Het.5.250.14$mean, alternative="two.sided") #p-value = 0.7714
+ks.test(Het.5.50.44$mean,Het.5.50.14$mean, alternative="two.sided") #p-value = 0.2286
 
-# Diff 3ans et 5 ans 250 ou 50ind reintroduits = non
-ks.test(Het.3.250.44$mean,Het.3.50.44$mean, alternative="two.sided") #p-value = 0.7714 pas de différence significative
-ks.test(Het.5.250.44$mean,Het.5.50.44$mean, alternative="two.sided") #p-value = 0.6994 pas de différence significative 
-ks.test(Het.3.250.14$mean,Het.3.50.14$mean, alternative="greater") #p-value = 0.03663 différence significative... ex-aquo donc valeurs faussees ?
-ks.test(Het.5.250.14$mean,Het.5.50.14$mean, alternative="two.sided") #p-value = 0.2286 pas de différence significative 
+# Diff 3ans et 5 ans 250 ou 50ind reintroduits = oui plus important avec 250
+ks.test(Het.3.250.44$mean,Het.3.50.44$mean, alternative="less") #p-value = 0.02857 différence 50 less than 250 (0.01832)
+ks.test(Het.5.250.44$mean,Het.5.50.44$mean, alternative="less") #p-value = 0.02857 différence 50 less than 250 (0.01832)
+ks.test(Het.3.250.14$mean,Het.3.50.14$mean, alternative="two.sided") #p-value = 0.02857 50 less than 250 (0.01832)
+ks.test(Het.5.250.14$mean,Het.5.50.14$mean, alternative="two.sided") #p-value = 0.02857 50 less than 250 (0.01832)
 
 # Pas les memes scenarios retenues avec Nall et Pextant. en commun 8 : S1, S2, S9, S10, S17, S18, S25 et S26
 Nall <- allscenario_dd %>% filter(Nall>200)
@@ -303,6 +337,41 @@ plot_grid(ggbase3, ggcata3, labels=c("Sans assèchements", "Avec assèchements"), 
 
 ### Nombre d'individus reintroduits 500 vs 100
 ### Probabilite survie 0.44 vs 0.14
+#### Assechement catastrophe avec meilleurs scenarios ####
+cata25.all <- bind_rows(list(basic.cata25,cata25))
+cata25.all <- cata25.all %>% filter(pop.name %in% c("Naturelle","Reintroduite"))
+names(cata25.all)[20] <- "SD.GeneDiv."
+dot_plot(cata25.all,project='catastrophy.xlm',scenario='Basic-25ans',yrs=c(10,25),params=c("PExtant","GeneDiv"), setcolour = "scen.name", plotpops="Naturelle", save2disk=F)
+cata50.all <- bind_rows(list(basic.cata50,cata50))
+cata50.all <- cata50.all %>% filter(pop.name %in% c("Naturelle","Reintroduite"))
+names(cata50.all)[20] <- "SD.GeneDiv."
+dot_plot(cata50.all,project='catastrophy.xlm',scenario='Basic-50ans',yrs=c(10,20,30,50),params=c("PExtant","GeneDiv"),
+              setcolour = "Nextant", plotpops="Reintroduite", save2disk=F)
+
+basic50.nat <- basic.cata50 %>% filter(basic.cata50$pop.name %in% "Naturelle")
+basic50.reintro <- basic.cata50 %>% filter(basic.cata50$pop.name %in% "Reintroduite")
+as.data.frame(tapply(basic50.nat$GeneDiv, basic50.nat$scen.name,mean))
+as.data.frame(tapply(basic50.nat$SD.GD., basic50.nat$scen.name,mean))
+
+
+cata50.nat <- cata50.all %>% filter(cata50.all$pop.name %in% "Naturelle")
+cata50.reintro <- cata50.all %>% filter(cata50.all$pop.name %in% "Reintroduite")
+as.data.frame(tapply(cata50.nat$GeneDiv, cata50.nat$scen.name,mean))
+as.data.frame(tapply(cata50.reintro$SD.GD., cata50.reintro$scen.name,mean))
+
+names()[1] <- "mean"
+
+#### Assechement catastrophe avec pires scenarios ####
+worst50.all <- bind_rows(list(basic.worst50,cata.worst50))
+worst50.all <- worst50.all %>% filter(pop.name %in% c("Naturelle","Reintroduite"))
+names(worst50.all)[20] <- "SD.GeneDiv."
+dot_plot(worst50.all,project='catastrophy-worst.xlm',scenario='Basic-50ans',yrs=c(25,50),params=c("PExtant","GeneDiv"), setcolour = "scen.name", plotpops="Naturelle", save2disk=F)
+
+worst50.nat <- worst50.all %>% filter(worst50.all$pop.name %in% "Naturelle")
+worst50.reintro <- worst50.all %>% filter(worst50.all$pop.name %in% "Reintroduite")
+as.data.frame(tapply(worst50.nat$GeneDiv, worst50.nat$scen.name,mean))
+as.data.frame(tapply(worst50.reintro$SD.GeneDiv., worst50.reintro$scen.name,mean))
+
 #### DATA analysis 1 rRec ####
 # Calculate the mean recovery rate (Pacioni et al 2017) and compare scenarios *pop naturelle uniquement*
 recov.dd.nat.10 <- rRec(allscenario_dd, project="Parameters-tests-RFGB.xlm",scenario='Basic dd', 
@@ -368,6 +437,7 @@ run.cata.reintro <- run.cata[[2]] %>% filter(Scenario %in% c("Basic-without-25",
 Pext.dd.selected2 <- Pextinct(run.selected2, project='Parameters-tests-RFGB',
                              scenario='Basicdd', ST=FALSE, save2disk=FALSE)
 Pext.cata2 <- Pextinct(run.cata.reintro, project="catastrophy-dd", scenario="Basic-without-25",ST=FALSE, save2disk=FALSE)
+
 #### GLM ####
 # Remove base scenario from .run output in long format
 lrun.dd.no.base <- run.dd[[2]][!run.dd[[2]]$Scenario == 'Basicdd',]
